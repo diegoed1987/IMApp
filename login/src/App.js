@@ -1,0 +1,20 @@
+import React from 'react';
+import './App.css';
+import Login from './page/Login/Login';
+import Register from './page/Register/Register';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+          <Switch>
+            <Route extact={true} path="/register" component={Register}/>
+            <Route extact={true} path="/login" component={Login}/>
+          </Switch>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
