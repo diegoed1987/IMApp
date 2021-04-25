@@ -10,8 +10,26 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import './Register.css';
+import AuthService from '../../services/auth.service';
 
 const Register = () => {
+
+  const [vEmail, setEmail] = React.useState("");
+  const [vHelper, setHelper] = React.useState("");
+  const [vError, setError] = React.useState(false);
+  const [vNombre, setNombre] = React.useState("");
+  const [vApellido, setApellido] = React.useState("");
+  const [vPass, setPass] = React.useState("");
+
+  function handleSubmit(){
+    console.log("Nombre: "+ vNombre);
+    console.log("Apellido: "+ vApellido);
+    console.log("Correo: "+ vEmail);
+    console.log("Password: "+ vPass);
+
+    AuthService.register(vNombre, vApellido, vEmail, vPass);    
+  }
+
     const classes = useStyles();
 
   return (
@@ -26,27 +44,47 @@ const Register = () => {
           <Typography component="h1" variant="h5">
             Registro
           </Typography>
-          <form className="form" noValidate>
+          <form className="form">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  name="name" variant="outlined" required fullWidth id="name" label="Nombre" autoFocus/>
+                  name="name" variant="outlined" required fullWidth id="name" label="Nombre" autoFocus
+                  onChange={(e)=>{
+                    setNombre(e.target.value);
+                  }}/>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  variant="outlined" required fullWidth id="lastname" label="Apellido" name="lastname"/>
+                  variant="outlined" required fullWidth id="lastname" label="Apellido" name="lastname"
+                  onChange={(e)=>{
+                    setApellido(e.target.value);
+                  }}/>
               </Grid>
               <Grid item xs={12}>
                 <TextField variant="outlined" required fullWidth id="email" label="Correo Electrónico"
-                  name="email"/>
+                  name="email" onChange={(e) =>{
+                    setEmail(e.target.value);
+                    let reg = new RegExp(/@/g).test(vEmail);
+                    if(!reg){
+                      setError(true);
+                      setHelper("Correo invalido");
+                    }else{
+                      setError(false);
+                      setHelper("");
+                    }
+                  }} error={vError} helperText={vHelper}/>
               </Grid>
               <Grid item xs={12}>
                 <TextField variant="outlined" required fullWidth name="password"
                   label="Contraseña" type="password" id="password" autoComplete="current-password"
+                  onChange={(e)=>{
+                    setPass(e.target.value);
+                  }}
                 />
               </Grid>
             </Grid>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+            <Button fullWidth variant="contained" color="primary" className={classes.submit}
+            onClick={handleSubmit}>
               Registrar
             </Button>
             <Grid container justify="flex-end">
@@ -69,5 +107,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
+
+
 
 export default Register;
