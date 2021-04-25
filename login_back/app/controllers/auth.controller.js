@@ -17,14 +17,14 @@ exports.signup = (req, res) => {
   })
   .then(user =>{
     res.status(200).send({
-      message: "Usuario creado satisfactoriamente", 
+      message: "200", 
       datos:{
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         email: req.body.email,
         password: req.body.password
       } 
-  })
+    })
   })
     .catch(err => {
       res.status(500).send({ message: err.message });
@@ -39,7 +39,7 @@ exports.signin = (req, res) => {
   })
     .then(user => {
       if (!user) {
-        return res.status(404).send({ message: "El correo no existe" });
+        return res.status(200).send({ message: "404" });
       }
 
       var passwordIsValid = bcrypt.compareSync(
@@ -48,9 +48,9 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(401).send({
+        return res.status(200).send({
           accessToken: null,
-          message: "Contraseña Inválida"
+          message: "401"
         });
       }
 
@@ -60,7 +60,7 @@ exports.signin = (req, res) => {
 
       return res.status(200).send({
         accessToken: token,
-        message: "Iniciaste Sesion Correctamente" 
+        message: "200" 
       })
     })
     .catch(err => {

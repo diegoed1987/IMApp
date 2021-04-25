@@ -9,6 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import { Redirect } from 'react-router';
 import './Register.css';
 import AuthService from '../../services/auth.service';
 
@@ -20,14 +21,14 @@ const Register = () => {
   const [vNombre, setNombre] = React.useState("");
   const [vApellido, setApellido] = React.useState("");
   const [vPass, setPass] = React.useState("");
+  const [vRedirect, setRedirect] = React.useState(false);
 
   function handleSubmit(){
-    console.log("Nombre: "+ vNombre);
-    console.log("Apellido: "+ vApellido);
-    console.log("Correo: "+ vEmail);
-    console.log("Password: "+ vPass);
+    AuthService.register(vNombre, vApellido, vEmail, vPass).then(response=>{
+      if (response.message === 200){
 
-    AuthService.register(vNombre, vApellido, vEmail, vPass);    
+      }
+    });    
   }
 
     const classes = useStyles();
@@ -95,6 +96,9 @@ const Register = () => {
               </Grid>
             </Grid>
           </form>
+          {vRedirect && (
+          <Redirect to={'/login'}/>
+          )}
         </div>
       </Grid>
     </Grid>

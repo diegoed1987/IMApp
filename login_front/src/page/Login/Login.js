@@ -9,9 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import Register from '../Register/Register';
-import { useHistory } from "react-router-dom";
+import { Redirect } from 'react-router';
+import AuthService from '../../services/auth.service';
 import './Login.css';
 
 const Login = () =>{
@@ -20,14 +19,22 @@ const Login = () =>{
   const [vPass, setPass] = React.useState("");
   const [vHelper, setHelper] = React.useState("");
   const [vError, setError] = React.useState(false);
+  const [vInvalid, setInvalid] = React.useState("");
+  const [vRedirect, setRedirect] = React.useState(false);
 
   function handleSubmit(){
-    console.log("Correo: "+ vEmail);
-    console.log("Password: "+ vPass);
-    
-    if(vEmail === "diegoerazo.121@gmail.com" && vPass === "oceano121"){
-      this.props.history.push('/register')
-    }
+    AuthService.login(vEmail, vPass).then((response)=>{
+      if (response.message === "200"){        
+        setInvalid("");
+        setRedirect(true);
+      }else if(response.message === "401"){
+        setInvalid("Correo o contraseña invalidos.");
+        setRedirect(false);
+      }else if(response.message === "404"){
+        setInvalid("El correo no existe.");
+        setRedirect(false);
+      }
+    });
   }
 
   const classes = useStyles();
@@ -44,7 +51,7 @@ const Login = () =>{
           <Typography component="h1" variant="h5">
             Inicio Sesión
           </Typography>
-          <form className="form" action="/selector">
+          <form className="form"> 
             <TextField variant="outlined" margin="normal" required fullWidth id="email"
               label="Correo Electrónico" name="email" autoComplete="email" autoFocus
               onChange={(e) =>{
@@ -63,7 +70,11 @@ const Login = () =>{
               onChange={(e)=>{
                 setPass(e.target.value);
               }}/>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+            <Grid container>
+              <label className="errorLabel">{vInvalid}</label>
+            </Grid>
+            <Button fullWidth variant="contained" color="primary" className={classes.submit}
+            onClick={handleSubmit}>
               Iniciar Sesion
             </Button>
             <Grid container>
@@ -74,6 +85,9 @@ const Login = () =>{
               </Grid>
             </Grid>
           </form>
+          {vRedirect && (
+          <Redirect to={'/selector'}/>
+          )}
         </div>
       </Grid>
     </Grid>
