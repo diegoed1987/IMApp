@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import { Redirect } from 'react-router';
 import './Register.css';
 import AuthService from '../../services/auth.service';
+import Swal from 'sweetalert2';
 
 const Register = () => {
 
@@ -22,11 +23,28 @@ const Register = () => {
   const [vApellido, setApellido] = React.useState("");
   const [vPass, setPass] = React.useState("");
   const [vRedirect, setRedirect] = React.useState(false);
-
+  const [vInvalid, setInvalid] = React.useState("");
+  
   function handleSubmit(){
     AuthService.register(vNombre, vApellido, vEmail, vPass).then(response=>{
-      if (response.message === 200){
-
+      console.log("handleSubmit :" + response.message);
+      if (response.message === "200"){   
+        setInvalid("");     
+          Swal.fire({
+            icon: 'success',
+            title: 'Registro',
+            confirmButtonText: 'OK',
+            text: 'Te haz registrado correctamente',
+            footer: '',
+            showCloseButton: false
+        })
+        .then(function (result) {
+            if (result.value) {
+              setRedirect(true);
+            }
+        })
+      }else if(response.message === "400"){
+        setInvalid("El correo ya existe.");
       }
     });    
   }
@@ -83,6 +101,9 @@ const Register = () => {
                   }}
                 />
               </Grid>
+            </Grid>
+            <Grid container>
+              <label className="errorLabel">{vInvalid}</label>
             </Grid>
             <Button fullWidth variant="contained" color="primary" className={classes.submit}
             onClick={handleSubmit}>
