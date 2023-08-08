@@ -1,16 +1,16 @@
 # IMApp
+
 A simple login page using Reackt, NodeJs, Express and PostgreSQL
 <br>
+Login Page
 <br>
-<h1>Login Page</h1>
+![IMApp_LoginPage](LoginPage.png)
 <br>
-[IMApp_LoginPage](LoginPage.png)
+Register Page
 <br>
-<h1>Register Page</h1>
+![IMApp_RegisterPage](RegisterPage.png)
 <br>
-[IMApp_RegisterPage](RegisterPage.png)
-<br>
-<h1>Selector Page</h1>
+Selector Page
 A selector page using cards with hover transition over the cards
 <br>
-[IMApp_SelectorPage](ApplicationSelector.png)
+![IMApp_SelectorPage](ApplicationSelector.png)
